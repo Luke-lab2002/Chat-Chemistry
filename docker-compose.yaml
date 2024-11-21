@@ -1,0 +1,32 @@
+version: "3.9"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nest-chat-chemsistry
+    ports:
+      - "3000:3000" # Expose NestJS app on port 3000
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/mydatabase
+      - NODE_ENV=development
+    depends_on:
+      - mongo
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+
+  mongo:
+    image: mongo:6.0
+    container_name: mongodb
+    ports:
+      - "27017:27017" # Expose MongoDB on port 27017
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=example
+      - MONGO_INITDB_DATABASE=mydatabase
+
+volumes:
+  mongodb_data:
